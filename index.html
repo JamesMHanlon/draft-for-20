@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draft for 20</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<!-- ============ HOME ============ -->
+<section id="home" class="screen active">
+  <div class="home-wrap">
+    <h1 class="logo">DRAFT <span>for</span> 20</h1>
+    <p class="tagline">The online auction draft. £20 each, outbid your mates, build the best team.</p>
+    <div class="home-card">
+      <label class="lbl" for="myName">Your name</label>
+      <input id="myName" maxlength="16" placeholder="e.g. James">
+      <div class="home-split">
+        <div class="home-col">
+          <h2>Host a room</h2>
+          <label class="check"><input type="checkbox" id="hostPlays" checked> I'm playing too</label>
+          <button class="btn primary big" id="hostBtn">Create room</button>
+        </div>
+        <div class="home-or">or</div>
+        <div class="home-col">
+          <h2>Join a room</h2>
+          <input id="joinCode" maxlength="5" placeholder="ROOM CODE" class="code-in">
+          <button class="btn primary big" id="joinBtn">Join</button>
+        </div>
+      </div>
+      <p class="hint" id="homeStatus"></p>
+    </div>
+    <button class="btn ghost" data-help>❔ How to play</button>
+  </div>
+</section>
+
+<!-- ============ LOBBY ============ -->
+<section id="lobby" class="screen">
+  <header class="lobby-head">
+    <div>
+      <small class="kicker">ROOM CODE</small>
+      <div class="room-code" id="roomCode">-----</div>
+    </div>
+    <div class="lobby-head-r">
+      <button class="btn ghost small" id="copyLink">🔗 Copy invite link</button>
+      <button class="btn ghost small" id="leaveBtn">✕ Leave</button>
+    </div>
+  </header>
+  <div class="setup-grid">
+    <div class="panel">
+      <h2>Players <span id="pCount" class="dim"></span></h2>
+      <div id="lobbyPlayers" class="lobby-players"></div>
+      <div class="host-only row-btns">
+        <button class="btn ghost small" id="shuffleOrder">🎲 Shuffle order</button>
+        <label class="check"><input type="checkbox" id="hostPlaysLobby"> Host plays</label>
+      </div>
+      <p class="hint" id="spectators"></p>
+
+      <h2 class="mt">Rules</h2>
+      <div id="rulesBox">
+        <div class="opt"><label>Picks each</label>
+          <div class="seg" data-opt="picks"><button data-val="2">2</button><button data-val="3">3</button><button data-val="4">4</button><button data-val="5">5</button></div></div>
+        <div class="opt"><label>Budget</label>
+          <div class="seg" data-opt="budget"><button data-val="20">£20</button><button data-val="50">£50</button><button data-val="100">£100</button></div></div>
+        <div class="opt"><label>Bid timer</label>
+          <div class="seg" data-opt="timer"><button data-val="0">Off</button><button data-val="10">10s</button><button data-val="15">15s</button><button data-val="20">20s</button><button data-val="30">30s</button></div></div>
+        <div class="opt"><label>Board</label>
+          <div class="seg" data-opt="blind"><button data-val="true">Blind</button><button data-val="false">Open</button></div></div>
+        <div class="opt"><label>Scoring</label>
+          <div class="seg" data-opt="scoring"><button data-val="&quot;rank&quot;">Ranked reveal</button><button data-val="&quot;vote&quot;">Player vote</button></div></div>
+      </div>
+      <p class="hint" id="rulesHint"></p>
+    </div>
+    <div class="panel genres-panel">
+      <h2>Genre</h2>
+      <div id="genreGrid" class="genre-grid"></div>
+      <div id="genreView" class="genre-view"></div>
+    </div>
+  </div>
+  <div class="setup-foot">
+    <button class="btn ghost" data-help>❔ How to play</button>
+    <span class="hint" id="waitMsg"></span>
+    <button class="btn primary big host-only" id="startBtn">START AUCTION ▶</button>
+  </div>
+</section>
+
+<!-- ============ AUCTION ============ -->
+<section id="auction" class="screen">
+  <header class="topbar">
+    <div class="genre-tag"><span id="aGenre"></span></div>
+    <div class="turn" id="turnBanner"></div>
+    <div class="top-right">
+      <div class="timer" id="timer"></div>
+      <div class="pickcount" id="pickCount"></div>
+    </div>
+  </header>
+  <div class="draft-body">
+    <div class="teams-col" id="teamsLeft"></div>
+    <div class="board-wrap">
+      <div id="lotBox"></div>
+      <div id="myBid"></div>
+      <div class="board" id="board"></div>
+      <div class="upnext" id="upNext"></div>
+    </div>
+    <div class="teams-col" id="teamsRight"></div>
+  </div>
+  <footer class="hostbar">
+    <span class="host-only hb">
+      <button class="btn ghost" id="undoBtn" title="Ctrl+Z">↶ Undo</button>
+      <button class="btn ghost" id="pauseBtn" title="P">⏸ Pause</button>
+      <button class="btn ghost" id="rerollBtn">🎲 Different item</button>
+    </span>
+    <span class="spacer"></span>
+    <button class="btn ghost" id="muteBtn" title="M">🔊</button>
+    <button class="btn ghost" id="fsBtn" title="F">⛶</button>
+    <button class="btn ghost host-only" id="endBtn">✕ End game</button>
+    <button class="btn primary host-only" id="soldBtn">SOLD! <kbd>Enter</kbd></button>
+    <button class="btn primary host-only" id="toResultsBtn" hidden>Go to the reveal ▶</button>
+  </footer>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section id="results" class="screen">
+  <header class="results-head">
+    <h1 id="resultsTitle">THE REVEAL</h1>
+    <p id="resultsSub"></p>
+  </header>
+  <div class="spotlight" id="spotlight"></div>
+  <div class="results-grid" id="resultsGrid"></div>
+  <footer class="hostbar">
+    <span class="spacer"></span>
+    <span class="hint" id="resultsWait"></span>
+    <button class="btn ghost host-only" id="revealAllBtn">Reveal all</button>
+    <button class="btn primary host-only" id="revealBtn">Reveal next ▶ <kbd>Space</kbd></button>
+    <button class="btn primary host-only" id="crownBtn" hidden>👑 Crown the winner</button>
+  </footer>
+</section>
+
+<!-- ============ WINNER ============ -->
+<section id="winner" class="screen">
+  <div class="winner-wrap">
+    <p class="winner-kicker" id="winnerKicker"></p>
+    <h1 class="winner-name" id="winnerName"></h1>
+    <div class="podium" id="podium"></div>
+    <div class="awards" id="awards"></div>
+    <div class="winner-actions">
+      <button class="btn primary host-only" id="lobbyBtn">Back to lobby ↻</button>
+      <span class="hint" id="winnerWait"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODALS ============ -->
+<div class="modal" id="customModal" hidden>
+  <div class="modal-card">
+    <h2>Create your own genre</h2>
+    <div class="row">
+      <input id="cEmoji" maxlength="4" placeholder="🔥" class="emoji-in">
+      <input id="cName" maxlength="40" placeholder="Genre name (e.g. Best Snacks)">
+    </div>
+    <textarea id="cItems" rows="12" placeholder="At least 20 items, one per line (40 lets bigger groups play)"></textarea>
+    <label class="check"><input type="checkbox" id="cRanked"> My list is in ranked order (best first) — enables Ranked reveal</label>
+    <input id="cBasis" maxlength="60" placeholder="Ranked by… (e.g. our group's opinion)">
+    <p class="hint" id="cCount">0 items</p>
+    <div class="modal-actions">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn primary" id="cSave">Save genre</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="helpModal" hidden>
+  <div class="modal-card wide">
+    <h2>How to play</h2>
+    <ol class="help-list">
+      <li>One person clicks <b>Create room</b> and shares the <b>room code</b>. Everyone else opens the game on their own PC, types the code and clicks <b>Join</b>. Up to 8 players can join, and anyone who joins after that watches as a spectator.</li>
+      <li>The host picks the genre and rules. The game draws a random pool of <b>players × picks</b> items, and each one has a secret rank.</li>
+      <li>Everyone starts with <b>£20</b>. Items come up one at a time. The player whose turn it is opens the bidding at £1, and anyone can raise from their own PC. When the timer runs out, or the host presses <b>SOLD</b>, the highest bidder gets the item.</li>
+      <li>You always keep at least £1 for each empty slot, so you can always fill your team.</li>
+      <li><b>Ranked reveal:</b> ranks are revealed from last to first, and better items score more points. <b>Player vote:</b> everyone votes for the best team, but you can't vote for your own.</li>
+    </ol>
+    <h2>Shortcuts</h2>
+    <div class="keys">
+      <span><kbd>Space</kbd> bid +£1</span><span><kbd>2</kbd> +£2</span><span><kbd>5</kbd> +£5</span><span><kbd>0</kbd> +£10</span>
+      <span>Host: <kbd>Enter</kbd> sold, <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo, <kbd>P</kbd> pause, <kbd>Space</kbd> reveal next</span>
+      <span><kbd>M</kbd> mute</span><span><kbd>F</kbd> fullscreen</span>
+    </div>
+    <div class="modal-actions"><button class="btn primary" data-close>Got it</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="genres.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
