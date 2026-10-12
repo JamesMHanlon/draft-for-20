@@ -1,6 +1,6 @@
 // Genres group the categories in the lobby. Each category's items are in ranked order: best first. Edit freely.
 // Each game draws a random pool of (players × picks) items from a category, so 40+ items lets 8 players take 5 each.
-window.GENRE_GROUPS = [{ id:"sport", name:"Sport", emoji:"🏆" },{ id:"music", name:"Music", emoji:"🎵" },{ id:"screen", name:"Film & TV", emoji:"🎬" },{ id:"gaming", name:"Gaming & Anime", emoji:"🎮" },{ id:"food", name:"Food & Drink", emoji:"🍔" },{ id:"places", name:"Places & Brands", emoji:"🌍" },{ id:"fun", name:"Characters & Fun", emoji:"🦸" }];
+window.GENRE_GROUPS = [{ id:"sport", name:"Sport", emoji:"🏆" },{ id:"music", name:"Music", emoji:"🎵" },{ id:"screen", name:"Film & TV", emoji:"🎬" },{ id:"gaming", name:"Gaming & Anime", emoji:"🎮" },{ id:"esports", name:"Esports & Game Picks", emoji:"🎯" },{ id:"food", name:"Food & Drink", emoji:"🍔" },{ id:"places", name:"Places & Brands", emoji:"🌍" },{ id:"fun", name:"Characters & Fun", emoji:"🦸" }];
 window.GENRES = [
   { id:"nba", cat:"sport", name:"NBA Legends", emoji:"🏀", basis:"our all-time list (argue in chat)", items:[
     "Michael Jordan","LeBron James","Kareem Abdul-Jabbar","Magic Johnson","Bill Russell","Wilt Chamberlain","Larry Bird","Tim Duncan","Shaquille O'Neal","Kobe Bryant",
@@ -310,4 +310,67 @@ window.GENRES = [
     "Poodle","Labradoodle","Bulldog","Whippet","Greyhound","Dalmatian","Bichon Frise","Cavalier King Charles","Maltese","Akita",
     "Saint Bernard","Newfoundland","Bloodhound","Basset Hound","Weimaraner","Vizsla","Lurcher","Shar Pei","Chow Chow","Bull Terrier",
     "Afghan Hound"]},
+  { id:"cs", cat:"esports", name:"CS Players", emoji:"🔫", basis:"all-time greatness (our list)", items:[
+    "s1mple","ZywOo","device","NiKo","coldzera","GeT_RiGhT","olofmeister","f0rest","kennyS","karrigan",
+    "dupreeh","Xyp9x","gla1ve","NEO","donk","m0NESY","ropz","electroNic","FalleN","fer",
+    "GuardiaN","shox","apEX","TaZ","pashaBiceps","Snax","flusha","JW","KRIMZ","Twistzz",
+    "EliGE","NAF","Stewie2K","tarik","TACO","Happy","ScreaM","Edward","markeloff","Zeus",
+    "kioShiMa","rain","frozen","broky","jks","Magisk","huNter-","sh1ro","b1t","XANTARES",
+    "Jame","blameF","stavn","Spinx","Ax1Le","iM","Brollan","Perfecto","Boombl4","Hobbit"]},
+  { id:"lol", cat:"esports", name:"League Champions", emoji:"🧙", basis:"popularity (our list)", items:[
+    "Ahri","Yasuo","Lee Sin","Jinx","Thresh","Ezreal","Lux","Zed","Kai'Sa","Darius",
+    "Garen","Teemo","Master Yi","Jhin","Vayne","Katarina","Riven","Akali","Yone","Sett",
+    "Caitlyn","Miss Fortune","Ashe","Annie","Malphite","Blitzcrank","Morgana","Leona","Lulu","Nami",
+    "Sona","Soraka","Janna","Viego","Kayn","Graves","Kha'Zix","Rengar","Evelynn","Nidalee",
+    "Elise","Vi","Jax","Fiora","Camille","Irelia","Aatrox","Mordekaiser","Sylas","LeBlanc",
+    "Syndra","Orianna","Viktor","Twisted Fate","Ekko","Fizz","Diana","Draven","Lucian","Samira",
+    "Pyke","Senna","Seraphine"]},
+  { id:"overwatch", cat:"esports", name:"Overwatch Heroes", emoji:"🛡️", basis:"our list", items:[
+    "Tracer","Genji","Mercy","Reinhardt","D.Va","Widowmaker","Ana","Lúcio","Kiriko","Soldier: 76",
+    "Reaper","Hanzo","Junkrat","Roadhog","Winston","Zarya","Zenyatta","Pharah","Mei","Cassidy",
+    "Sombra","Moira","Doomfist","Sigma","Baptiste","Brigitte","Ashe","Echo","Orisa","Wrecking Ball",
+    "Sojourn","Junker Queen","Ramattra","Lifeweaver","Illari","Mauga","Venture","Juno","Hazard","Symmetra",
+    "Torbjörn","Bastion"]},
+  { id:"smash", cat:"esports", name:"Smash Bros Fighters", emoji:"💥", basis:"our list", items:[
+    "Mario","Link","Kirby","Pikachu","Fox","Captain Falcon","Samus","Donkey Kong","Sonic","Cloud",
+    "Joker","Steve","Sephiroth","Sora","Kazuya","Pyra & Mythra","Snake","Mewtwo","Marth","Ike",
+    "Bayonetta","Ridley","King K. Rool","Incineroar","Ganondorf","Bowser","Peach","Luigi","Yoshi","Ness",
+    "Jigglypuff","Zelda","Sheik","Falco","Lucina","Roy","Meta Knight","Pit","Palutena","Zero Suit Samus",
+    "Wario","Diddy Kong","Lucas","King Dedede","Olimar","Lucario","R.O.B.","Toon Link","Wolf","Villager",
+    "Mega Man","Little Mac","Greninja","Pac-Man","Shulk","Ryu","Terry","Banjo & Kazooie","Byleth","Min Min",
+    "Hero","Isabelle","Inkling","Simon","Piranha Plant","Wii Fit Trainer","Duck Hunt","Mr. Game & Watch","Ice Climbers"]},
+  { id:"minecraft", cat:"esports", name:"Minecraft Mobs", emoji:"⛏️", basis:"our list", items:[
+    "Creeper","Enderman","Warden","Ender Dragon","Wither","Axolotl","Villager","Iron Golem","Wolf","Cat",
+    "Fox","Bee","Panda","Allay","Piglin","Ghast","Blaze","Zombie","Skeleton","Spider",
+    "Wither Skeleton","Witch","Pillager","Ravager","Evoker","Vex","Phantom","Drowned","Guardian","Elder Guardian",
+    "Shulker","Slime","Magma Cube","Strider","Hoglin","Zombified Piglin","Horse","Pig","Cow","Sheep",
+    "Chicken","Llama","Turtle","Dolphin","Goat","Frog","Camel","Sniffer","Armadillo","Breeze",
+    "Snow Golem","Parrot","Mooshroom","Polar Bear","Rabbit","Squid","Glow Squid","Silverfish","Endermite"]},
+  { id:"codmaps", cat:"esports", name:"Call of Duty Maps", emoji:"🗺️", basis:"best map (our list)", items:[
+    "Nuketown","Rust","Shipment","Terminal","Highrise","Favela","Crash","Crossfire","Killhouse","Firing Range",
+    "Hijacked","Raid","Standoff","Summit","Express","Slums","Plaza","Meltdown","Strike","Overgrown",
+    "Backlot","Vacant","Scrapyard","Sub Base","Skidrow","Underpass","Wasteland","Estate","Karachi","Invasion",
+    "Quarry","Afghan","Derail","Rundown","Dome","Seatown","Arkaden","Village","Mission","Resistance",
+    "Hardhat","Lockdown","Bootleg","Downturn","Interchange","Carrier","Hackney","Gun Runner","Piccadilly","Nuketown 2025"]},
+  { id:"clash", cat:"esports", name:"Clash Royale Cards", emoji:"👑", basis:"our list", items:[
+    "Hog Rider","Mega Knight","P.E.K.K.A","Giant","Golem","Lava Hound","Royal Giant","Balloon","X-Bow","Miner",
+    "Graveyard","Electro Wizard","Wizard","Musketeer","Valkyrie","Knight","Archers","Goblin Barrel","Skeleton Army","Minion Horde",
+    "Fireball","Zap","The Log","Arrows","Rocket","Lightning","Poison","Tornado","Inferno Tower","Tesla",
+    "Cannon","Bomb Tower","Princess","Ice Wizard","Sparky","Bandit","Royal Ghost","Night Witch","Lumberjack","Magic Archer",
+    "Mega Minion","Baby Dragon","Inferno Dragon","Electro Giant","Firecracker","Ice Spirit","Fire Spirit","Goblin Gang","Dart Goblin","Bats",
+    "Elite Barbarians","Barbarians","Witch","Bowler","Executioner","Hunter","Prince","Dark Prince","Mini P.E.K.K.A","Skeletons",
+    "Golden Knight","Archer Queen","Skeleton King","Mighty Miner","Monk"]},
+  { id:"souls", cat:"esports", name:"Souls Bosses", emoji:"🗡️", basis:"best boss fight (our list)", items:[
+    "Malenia","Starscourge Radahn","Godrick the Grafted","Margit","Rennala","Morgott","Maliketh","Mohg","Rykard","Godfrey",
+    "Radagon","Elden Beast","Messmer","Rellana","Bayle the Dread","Promised Consort Radahn","Ornstein & Smough","Knight Artorias","Great Grey Wolf Sif","Gwyn",
+    "Manus","Nameless King","Sister Friede","Slave Knight Gael","Pontiff Sulyvahn","Dancer of the Boreal Valley","Abyss Watchers","Soul of Cinder","Lady Maria","Ludwig",
+    "Orphan of Kos","Gehrman","Father Gascoigne","Laurence","Isshin the Sword Saint","Genichiro","Guardian Ape","Great Shinobi Owl","Demon of Hatred","Lady Butterfly",
+    "Corrupted Monk","Old Hero","Penetrator","Tower Knight","Flamelurker","Old Monk","Capra Demon","Bell Gargoyles","Taurus Demon","Asylum Demon"]},
+  { id:"streamers", cat:"esports", name:"Gaming YouTubers & Streamers", emoji:"📹", basis:"our list", items:[
+    "MrBeast","KSI","PewDiePie","Markiplier","Jacksepticeye","DanTDM","Ninja","xQc","Kai Cenat","IShowSpeed",
+    "Pokimane","Shroud","TimTheTatman","Dream","Technoblade","Ali-A","Vikkstar123","W2S","Miniminter","Zerkaa",
+    "Behzinga","TBJZL","Syndicate","Valkyrae","Ludwig","Mizkif","Asmongold","summit1g","Tfue","Nickmercs",
+    "CouRage","LazarBeam","Muselk","Lachlan","Typical Gamer","Jynxzi","Stable Ronaldo","CaseOh","Sketch","Fanum",
+    "Agent 00","Aimsey","Clix","Bugha","TommyInnit","Ranboo","Wilbur Soot","GeorgeNotFound","Sapnap","Quackity",
+    "Ironmouse","Jschlatt","DrLupo","Sypher PK"]},
 ];
