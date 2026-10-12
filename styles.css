@@ -275,3 +275,5 @@ body.is-host .host-only[hidden]{display:none!important}
 .rteam.votable:hover{transform:translateY(-3px);transition:transform .15s}
 .rteam.voted{box-shadow:0 0 0 3px #fff,0 0 30px color-mix(in srgb,var(--pc) 50%,transparent)}
 .vote-tag{margin-top:auto;text-align:center;font-weight:800;color:var(--pc);padding-top:6px}
+
+.group-head{grid-column:1/-1;display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px}

@@ -58,7 +58,10 @@ function show(id) { document.querySelectorAll('.screen').forEach(s => s.classLis
 let custom = store.get('custom', []);
 const allGenres = () => [...GENRES.map(g => ({ ...g, ranked: true })), ...custom];
 const findGenre = id => allGenres().find(g => g.id === id) || allGenres()[0];
-const genreInfo = g => ({ id: g.id, name: g.name, emoji: g.emoji || '⭐', basis: g.basis, ranked: !!g.ranked, count: g.items.length });
+const GROUPS = [...GENRE_GROUPS, { id: 'custom', name: 'Your Categories', emoji: '⭐' }];
+const groupOf = g => GROUPS.find(x => x.id === (g.custom ? 'custom' : g.cat)) || GROUPS[0];
+let uiGroup = null; // host's lobby picker: null = genre list, else a genre id
+const genreInfo = g => ({ group: groupOf(g).name, id: g.id, name: g.name, emoji: g.emoji || '⭐', basis: g.basis, ranked: !!g.ranked, count: g.items.length });
 
 /* =====================================================================
    HOST
@@ -366,19 +369,32 @@ function renderLobby(v) {
     renderGenreGrid(s.genreId);
   } else {
     $('#genreGrid').hidden = true; $('#genreView').hidden = false;
-    $('#genreView').innerHTML = `<div class="gcard on big-genre"><span class="ge">${esc(v.genre.emoji)}</span><span class="gn">${esc(v.genre.name)}</span><span class="gb">${v.genre.ranked ? 'Ranked by ' + esc(v.genre.basis) : 'Vote only'}</span></div><p class="hint">The host chooses the genre and rules.</p>`;
+    $('#genreView').innerHTML = `<div class="gcard on big-genre"><span class="ge">${esc(v.genre.emoji)}</span><span class="gn">${esc(v.genre.name)}</span><span class="gb">${esc(v.genre.group)} · ${v.genre.count} items · ${v.genre.ranked ? 'Ranked by ' + esc(v.genre.basis) : 'Vote only'}</span></div><p class="hint">The host chooses the genre and rules.</p>`;
   }
   $('#startBtn').disabled = v.players.length < 2 || tooFew;
   $('#waitMsg').textContent = isHost() ? (v.players.length < 2 ? 'You need at least 2 players to start' : '') : 'Waiting for the host to start…';
 }
 function renderGenreGrid(sel) {
-  $('#genreGrid').innerHTML = allGenres().map(g =>
+  const selGroup = groupOf(findGenre(sel)).id;
+  $('#genreTitle').textContent = uiGroup ? 'Pick a category' : 'Pick a genre';
+  if (!uiGroup) {
+    $('#genreGrid').innerHTML = GROUPS.map(gr => {
+      const n = allGenres().filter(g => groupOf(g).id === gr.id).length;
+      if (gr.id === 'custom' && !n) return '';
+      return `<button class="gcard ${gr.id === selGroup ? 'on' : ''}" data-group="${gr.id}"><span class="ge">${gr.emoji}</span><span class="gn">${esc(gr.name)}</span><span class="gb">${n} categor${n === 1 ? 'y' : 'ies'}${gr.id === selGroup ? ' · selected: ' + esc(findGenre(sel).name) : ''}</span></button>`;
+    }).join('') +
+    `<button class="gcard" data-g="__random"><span class="ge">🎲</span><span class="gn">Surprise me</span><span class="gb">Random category</span></button>
+     <button class="gcard add" data-g="__add"><span class="ge">＋</span><span class="gn">Create your own</span></button>`;
+    return;
+  }
+  const gr = GROUPS.find(x => x.id === uiGroup);
+  $('#genreGrid').innerHTML = `<div class="group-head"><button class="btn ghost small" data-group="">◀ All genres</button><span>${gr.emoji} ${esc(gr.name)}</span></div>` +
+    allGenres().filter(g => groupOf(g).id === uiGroup).map(g =>
     `<button class="gcard ${g.id === sel ? 'on' : ''}" data-g="${esc(g.id)}">
       ${g.custom ? `<span class="del" data-del="${esc(g.id)}" title="Delete">✕</span>` : ''}
       <span class="ge">${esc(g.emoji || '⭐')}</span><span class="gn">${esc(g.name)}</span>
       <span class="gb">${g.ranked ? 'Ranked by ' + esc(g.basis) : 'Vote only'}</span></button>`).join('') +
-    `<button class="gcard" data-g="__random"><span class="ge">🎲</span><span class="gn">Surprise me</span><span class="gb">Random genre</span></button>
-     <button class="gcard add" data-g="__add"><span class="ge">＋</span><span class="gn">Create your own</span></button>`;
+    `<button class="gcard" data-g="__random"><span class="ge">🎲</span><span class="gn">Surprise me</span><span class="gb">Random ${esc(gr.name)} category</span></button>`;
 }
 function setSetting(k, val) {
   const s = H.room.settings; s[k] = val;
@@ -575,10 +591,12 @@ $('#genreGrid').addEventListener('click', e => {
     if (H.room.settings.genreId === del.dataset.del) setSetting('genreId', 'nba'); else hostUpdate();
     return;
   }
+  const grp = e.target.closest('[data-group]');
+  if (grp) { uiGroup = grp.dataset.group || null; return renderGenreGrid(H.room.settings.genreId); }
   const c = e.target.closest('[data-g]'); if (!c) return;
   let id = c.dataset.g;
   if (id === '__add') return openModal('#customModal');
-  if (id === '__random') { const l = allGenres(); id = l[Math.random() * l.length | 0].id; hostEvent({ toast: `🎲 ${findGenre(id).name}!` }); }
+  if (id === '__random') { const l = allGenres().filter(g => !uiGroup || groupOf(g).id === uiGroup); id = l[Math.random() * l.length | 0].id; hostEvent({ toast: `🎲 ${findGenre(id).name}!` }); }
   setSetting('genreId', id);
 });
 $('#lobbyPlayers').addEventListener('click', e => {
@@ -634,7 +652,7 @@ $('#cSave').onclick = () => {
   const g = { id: 'c_' + Date.now(), name, emoji: $('#cEmoji').value.trim() || '⭐', items, ranked: $('#cRanked').checked, custom: true, basis: $('#cBasis').value.trim() || 'your list' };
   custom.push(g); store.set('custom', custom);
   closeModals(); ['#cName', '#cEmoji', '#cItems', '#cBasis'].forEach(s => $(s).value = ''); $('#cRanked').checked = false;
-  setSetting('genreId', g.id); toast('Genre saved!');
+  uiGroup = 'custom'; setSetting('genreId', g.id); toast('Category saved!');
 };
 
 // global keys
